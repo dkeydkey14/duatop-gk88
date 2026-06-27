@@ -59,12 +59,37 @@ body {
 }
 
 @media (max-width: 768px) {
+  html {
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+  }
+
+  body {
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+    touch-action: pan-y;
+    width: 100%;
+    max-width: 100%;
+  }
+
   .viewport-pc {
     display: none;
   }
 
   .viewport-mb {
     display: flex;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .viewport-mb .canvas-scaler {
+    overflow: hidden;
+    max-width: 100%;
+  }
+
+  .canvas-mb {
+    overflow: hidden;
   }
 }
 

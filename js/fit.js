@@ -10,23 +10,39 @@ function fitOne(scalerId, canvasId, designW, designH, { capAtOne = false } = {})
   const viewport = scaler?.parentElement;
   if (!scaler || !canvas || !viewport) return;
 
-  let scale = window.innerWidth / designW;
+  const viewW = window.innerWidth;
+  let scale = viewW / designW;
   if (capAtOne) scale = Math.min(scale, 1);
 
-  const scaledW = designW * scale;
+  const scaledW = Math.min(designW * scale, viewW);
   const scaledH = designH * scale;
 
+  viewport.style.width = "100%";
+  viewport.style.maxWidth = "100%";
+  viewport.style.overflow = "hidden";
   scaler.style.width = `${scaledW}px`;
+  scaler.style.maxWidth = "100%";
   scaler.style.height = `${scaledH}px`;
+  scaler.style.overflow = "hidden";
   viewport.style.height = `${scaledH}px`;
 
   canvas.style.transform = `scale(${scale})`;
   canvas.style.transformOrigin = "top left";
 }
 
+let lastFitWidth = 0;
+let lastFitView = "";
+
 function fitAll() {
   const isMobile = window.innerWidth <= BREAKPOINT;
-  document.body.dataset.view = isMobile ? "mb" : "pc";
+  const view = isMobile ? "mb" : "pc";
+  const viewW = window.innerWidth;
+
+  if (viewW === lastFitWidth && view === lastFitView) return;
+  lastFitWidth = viewW;
+  lastFitView = view;
+
+  document.body.dataset.view = view;
 
   if (isMobile) {
     fitOne("scaler-mb", "canvas-mb", MB_W, MB_H);
