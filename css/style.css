@@ -144,24 +144,61 @@ body {
   object-fit: cover;
 }
 
-.canvas-pc .bg-side {
-  width: 658px;
-  height: 658px;
+.canvas-pc .hero-gold-bag {
+  left: 1359px;
+  top: 221px;
+  width: 744px;
+  height: 1072px;
   object-fit: cover;
+  transform: rotate(10.75deg);
   transform-origin: center center;
-  animation: gentle-shake 4.2s ease-in-out infinite;
+  z-index: 2;
 }
 
-.canvas-pc .bg-side-l {
-  left: -19px;
-  top: 455px;
+.canvas-pc .hero-model-left {
+  left: -36px;
+  top: 276px;
+  width: 518px;
+  height: 786px;
+  object-fit: cover;
+  transform: rotate(-8.01deg);
+  transform-origin: center center;
+  z-index: 5;
 }
 
-.canvas-pc .bg-side-r {
-  left: 1247px;
-  top: 472px;
-  animation-duration: 4.8s;
-  animation-delay: -2.1s;
+.canvas-pc .hero-gift {
+  object-fit: cover;
+  z-index: 6;
+  transform-origin: center center;
+  animation: gentle-shake 3.6s ease-in-out infinite;
+}
+
+.canvas-pc .hero-gift-a {
+  left: 1596px;
+  top: 949px;
+  width: 419px;
+  height: 419px;
+  transform: rotate(153.54deg) scaleY(-1);
+  filter: drop-shadow(10px 10px 4px rgba(0, 0, 0, 0.25));
+  animation-duration: 4.1s;
+  animation-delay: -2.3s;
+}
+
+.canvas-pc .hero-gift-b {
+  left: 33px;
+  top: 913px;
+  width: 426px;
+  height: 426px;
+  transform: rotate(26.46deg);
+  animation-delay: -0.9s;
+}
+
+.canvas-pc .hero-gift-c {
+  left: -38px;
+  top: 1062px;
+  width: 266px;
+  height: 266px;
+  transform: rotate(153.54deg) scaleY(-1);
 }
 
 .canvas-pc .bg-lights2 {
@@ -244,10 +281,10 @@ body {
 }
 
 .canvas-pc .bg-fw2 {
-  left: 90px;
-  top: 301px;
-  width: 148px;
-  height: 147px;
+  left: 25px;
+  top: 173px;
+  width: 107px;
+  height: 107px;
   animation-duration: 3.8s;
   animation-delay: -2s;
 }
@@ -259,60 +296,6 @@ body {
   height: 281px;
   object-fit: cover;
   z-index: 3;
-}
-
-.canvas-pc .bg-gift {
-  object-fit: cover;
-  z-index: 6;
-  transform-origin: center center;
-  animation: gentle-shake 3.6s ease-in-out infinite;
-}
-
-.canvas-pc .bg-gift-l {
-  left: 132px;
-  top: 1017px;
-  width: 178px;
-  height: 148px;
-  animation-delay: -0.9s;
-}
-
-.canvas-pc .bg-gift-r {
-  left: 1499px;
-  top: 961px;
-  width: 232px;
-  height: 193px;
-  filter: drop-shadow(10px 10px 4px rgba(0, 0, 0, 0.25));
-  animation-duration: 4.1s;
-  animation-delay: -2.3s;
-}
-
-.canvas-pc .bg-gold {
-  object-fit: cover;
-  z-index: 6;
-}
-
-.canvas-pc .bg-gold-l {
-  left: -34px;
-  top: 979px;
-  width: 259px;
-  height: 259px;
-  transform: rotate(26deg);
-}
-
-.canvas-pc .bg-gold-l2 {
-  left: -136px;
-  top: 1014px;
-  width: 228px;
-  height: 228px;
-  transform: rotate(154deg) scaleY(-1);
-}
-
-.canvas-pc .bg-gold-r {
-  left: 1627px;
-  top: 944px;
-  width: 323px;
-  height: 323px;
-  transform: rotate(154deg) scaleY(-1);
 }
 
 .canvas-pc .home-link {
@@ -1481,9 +1464,8 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .canvas-pc .bg-side,
   .canvas-pc .bg-firework,
-  .canvas-pc .bg-gift,
+  .canvas-pc .hero-gift,
   .canvas-mb .mb-fw1,
   .canvas-mb .mb-fw2,
   .canvas-mb .mb-deco-small {
