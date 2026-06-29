@@ -2,7 +2,54 @@ const config = window.APP_CONFIG || {};
 const API_BASE = config.apiBase || "";
 const LIMIT = config.leaderboardLimit || 100;
 const REFRESH = config.refreshIntervalMs || 60_000;
+const LEADERBOARD_OPENS_AT = config.leaderboardOpensAt || "2026-07-01T11:00:00+07:00";
 const MEDALS = ["img/medal-1.png", "img/medal-2.png", "img/medal-3.png"];
+
+function getLeaderboardOpenTime() {
+  return new Date(LEADERBOARD_OPENS_AT);
+}
+
+function isLeaderboardOpen() {
+  return Date.now() >= getLeaderboardOpenTime().getTime();
+}
+
+function leaderboardNoticeHtml() {
+  return `
+    <div class="lb-state lb-notice">
+      <p>Danh sách xếp hạng mở từ 11:00 ngày 01/07/2026 (giờ Việt Nam).</p>
+      <p>Vui lòng quay lại sau thời điểm này.</p>
+    </div>`;
+}
+
+function renderLeaderboardNotice() {
+  document.querySelectorAll(".lb-tbody").forEach((el) => {
+    stopAutoScroll(el);
+    el.innerHTML = leaderboardNoticeHtml();
+  });
+}
+
+function updatePhaseBadges() {
+  document.querySelectorAll("[data-phase-badge='1']").forEach((el) => {
+    if (isLeaderboardOpen()) {
+      el.textContent = "ĐANG DIỄN RA";
+      el.className = "badge-live";
+    } else {
+      el.textContent = "CHUẨN BỊ DIỄN RA";
+      el.className = "badge-pending";
+    }
+  });
+}
+
+function scheduleLeaderboardOpen() {
+  updatePhaseBadges();
+  if (isLeaderboardOpen()) return;
+  const waitMs = getLeaderboardOpenTime().getTime() - Date.now();
+  if (waitMs <= 0) return;
+  setTimeout(() => {
+    updatePhaseBadges();
+    loadBoard();
+  }, waitMs + 500);
+}
 
 function $(id) {
   return document.getElementById(id);
@@ -201,6 +248,11 @@ function refreshAutoScroll() {
 }
 
 async function loadBoard() {
+  if (!isLeaderboardOpen()) {
+    renderLeaderboardNotice();
+    return;
+  }
+
   try {
     const res = await fetch(`${API_BASE}/api/leaderboard/top?limit=${LIMIT}`);
     if (!res.ok) throw new Error("fail");
@@ -249,6 +301,12 @@ function initModal() {
       result.className = "modal-result err";
       return;
     }
+    if (!isLeaderboardOpen()) {
+      result.innerHTML =
+        "Danh sách xếp hạng mở từ 11:00 ngày 01/07/2026 (giờ Việt Nam).<br>Vui lòng quay lại sau thời điểm này.";
+      result.className = "modal-result err";
+      return;
+    }
     result.textContent = "Đang tra cứu...";
     result.className = "modal-result loading";
     try {
@@ -277,6 +335,7 @@ function initModal() {
 
 initModal();
 loadBoard();
+scheduleLeaderboardOpen();
 setInterval(loadBoard, REFRESH);
 
 let resizeScrollTimer;

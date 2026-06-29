@@ -703,6 +703,22 @@ body {
   color: #c62828;
 }
 
+.lb-state.lb-notice {
+  font-style: normal;
+  color: #333;
+  line-height: 1.5;
+  padding: 24px 20px;
+}
+
+.lb-state.lb-notice p {
+  margin: 0 0 8px;
+  font-size: 13px;
+}
+
+.lb-state.lb-notice p:last-child {
+  margin-bottom: 0;
+}
+
 .btn-rank {
   display: block;
   width: 260px;
