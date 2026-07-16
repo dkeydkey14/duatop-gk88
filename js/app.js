@@ -2,15 +2,24 @@ const config = window.APP_CONFIG || {};
 const API_BASE = config.apiBase || "";
 const LIMIT = config.leaderboardLimit || 100;
 const REFRESH = config.refreshIntervalMs || 60_000;
-const LEADERBOARD_OPENS_AT = config.leaderboardOpensAt || "2026-07-16T11:00:00+07:00";
+const LEADERBOARD_OPENS_AT = config.leaderboardOpensAt || "2026-07-01T11:00:00+07:00";
+const PHASE2_STARTS_AT = config.phase2StartsAt || "2026-07-16T11:00:00+07:00";
 const MEDALS = ["img/medal-1.png", "img/medal-2.png", "img/medal-3.png"];
 
 function getLeaderboardOpenTime() {
   return new Date(LEADERBOARD_OPENS_AT);
 }
 
+function getPhase2StartTime() {
+  return new Date(PHASE2_STARTS_AT);
+}
+
 function isLeaderboardOpen() {
   return Date.now() >= getLeaderboardOpenTime().getTime();
+}
+
+function isPhase2Started() {
+  return Date.now() >= getPhase2StartTime().getTime();
 }
 
 function leaderboardNoticeHtml() {
@@ -28,27 +37,48 @@ function renderLeaderboardNotice() {
   });
 }
 
+function setBadge(el, text, className) {
+  el.textContent = text;
+  el.className = className;
+}
+
 function updatePhaseBadges() {
+  const phase2 = isPhase2Started();
+  const phase1Live = isLeaderboardOpen() && !phase2;
+
   document.querySelectorAll("[data-phase-badge='1']").forEach((el) => {
-    if (isLeaderboardOpen()) {
-      el.textContent = "ĐANG DIỄN RA";
-      el.className = "badge-live";
-    } else {
-      el.textContent = "CHUẨN BỊ DIỄN RA";
-      el.className = "badge-pending";
-    }
+    if (phase2) setBadge(el, "ĐÃ KẾT THÚC", "badge-pending");
+    else if (phase1Live) setBadge(el, "ĐANG DIỄN RA", "badge-live");
+    else setBadge(el, "CHUẨN BỊ DIỄN RA", "badge-pending");
   });
+
+  document.querySelectorAll("[data-phase-badge='2']").forEach((el) => {
+    if (phase2) setBadge(el, "ĐANG DIỄN RA", "badge-live");
+    else setBadge(el, "CHƯA BẮT ĐẦU", "badge-pending");
+  });
+}
+
+function scheduleAt(targetMs, fn) {
+  const waitMs = targetMs - Date.now();
+  if (waitMs <= 0) return;
+  setTimeout(fn, waitMs + 500);
 }
 
 function scheduleLeaderboardOpen() {
   updatePhaseBadges();
-  if (isLeaderboardOpen()) return;
-  const waitMs = getLeaderboardOpenTime().getTime() - Date.now();
-  if (waitMs <= 0) return;
-  setTimeout(() => {
-    updatePhaseBadges();
-    loadBoard();
-  }, waitMs + 500);
+
+  if (!isLeaderboardOpen()) {
+    scheduleAt(getLeaderboardOpenTime().getTime(), () => {
+      updatePhaseBadges();
+      loadBoard();
+    });
+  }
+
+  if (!isPhase2Started()) {
+    scheduleAt(getPhase2StartTime().getTime(), () => {
+      updatePhaseBadges();
+    });
+  }
 }
 
 function $(id) {
