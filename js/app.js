@@ -2,7 +2,7 @@ const config = window.APP_CONFIG || {};
 const API_BASE = config.apiBase || "";
 const LIMIT = config.leaderboardLimit || 100;
 const REFRESH = config.refreshIntervalMs || 60_000;
-const LEADERBOARD_OPENS_AT = config.leaderboardOpensAt || "2026-07-01T11:00:00+07:00";
+const LEADERBOARD_OPENS_AT = config.leaderboardOpensAt || "2026-07-16T11:00:00+07:00";
 const MEDALS = ["img/medal-1.png", "img/medal-2.png", "img/medal-3.png"];
 
 function getLeaderboardOpenTime() {
