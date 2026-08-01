@@ -411,17 +411,29 @@ body {
   margin: 0;
 }
 
+.canvas-pc .panel-lb .phase-row {
+  padding: 7px 9px;
+  margin-bottom: 6px;
+  font-size: 11px;
+}
+
+.canvas-pc .panel-lb .badge-live,
+.canvas-pc .panel-lb .badge-pending {
+  padding: 4px 9px;
+  font-size: 10px;
+}
+
 .canvas-pc .panel-lb .lb-table {
   position: absolute;
-  top: 221px;
+  top: 268px;
   left: 25px;
   width: 519px;
   margin: 0;
 }
 
 .canvas-pc .panel-lb .lb-tbody {
-  height: 362px;
-  max-height: 362px;
+  height: 330px;
+  max-height: 330px;
 }
 
 .canvas-pc .panel-lb .btn-rank {
