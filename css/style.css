@@ -1176,7 +1176,66 @@ body {
 }
 
 .modal-btn-primary:hover {
+  filter: brightness(1.05);
   box-shadow: 0 6px 16px rgba(250, 153, 38, 0.55);
+}
+
+/* Popup bảo trì / nâng cấp hệ thống */
+.maint-modal {
+  z-index: 1000;
+}
+
+.maint-box {
+  max-width: 440px;
+}
+
+.maint-head {
+  padding-bottom: 16px;
+}
+
+.maint-icon {
+  font-size: 36px;
+  line-height: 1;
+  margin-bottom: 10px;
+  animation: maint-bounce 1.6s ease-in-out infinite;
+}
+
+.maint-sub {
+  max-width: 340px;
+  margin: 0 auto;
+  line-height: 1.65;
+  color: #555;
+}
+
+.maint-note {
+  margin: 14px 0 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--orange);
+}
+
+.maint-actions {
+  padding: 0 24px;
+}
+
+body.maint-open {
+  overflow: hidden;
+}
+
+@keyframes maint-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .maint-icon {
+    animation: none;
+  }
 }
 
 .guide-list li {

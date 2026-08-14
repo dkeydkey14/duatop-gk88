@@ -2,6 +2,7 @@ const config = window.APP_CONFIG || {};
 const API_BASE = config.apiBase || "";
 const LIMIT = config.leaderboardLimit || 100;
 const REFRESH = config.refreshIntervalMs || 60_000;
+const MAINTENANCE_MODE = config.maintenanceMode === true;
 const LEADERBOARD_OPENS_AT = config.leaderboardOpensAt || "2026-07-01T11:00:00+07:00";
 const PHASE2_STARTS_AT = config.phase2StartsAt || "2026-07-16T11:00:00+07:00";
 const PHASE3_STARTS_AT = config.phase3StartsAt || "2026-08-01T11:00:00+07:00";
@@ -29,6 +30,45 @@ function isPhase2Started() {
 
 function isPhase3Started() {
   return Date.now() >= getPhase3StartTime().getTime();
+}
+
+function maintenanceNoticeHtml() {
+  return `
+    <div class="lb-state lb-notice">
+      <p>Hệ thống đang nâng cấp, vui lòng thử lại sau nhé!</p>
+      <p>GK88 đang cố gắng hết sức để quay lại sớm thôi.</p>
+    </div>`;
+}
+
+function renderMaintenanceNotice() {
+  document.querySelectorAll(".lb-tbody").forEach((el) => {
+    stopAutoScroll(el);
+    el.innerHTML = maintenanceNoticeHtml();
+  });
+}
+
+function initMaintenanceModal() {
+  const modal = $("maint-modal");
+  if (!modal || !MAINTENANCE_MODE) return;
+
+  const open = () => {
+    modal.classList.remove("hidden");
+    document.body.classList.add("maint-open");
+  };
+
+  const close = () => {
+    modal.classList.add("hidden");
+    document.body.classList.remove("maint-open");
+  };
+
+  $("maint-ok")?.addEventListener("click", close);
+  $("maint-backdrop")?.addEventListener("click", close);
+
+  open();
+}
+
+function isMaintenanceMode() {
+  return MAINTENANCE_MODE;
 }
 
 function leaderboardNoticeHtml() {
@@ -301,6 +341,11 @@ function refreshAutoScroll() {
 }
 
 async function loadBoard() {
+  if (isMaintenanceMode()) {
+    renderMaintenanceNotice();
+    return;
+  }
+
   if (!isLeaderboardOpen()) {
     renderLeaderboardNotice();
     return;
@@ -360,6 +405,12 @@ function initModal() {
       result.className = "modal-result err";
       return;
     }
+    if (isMaintenanceMode()) {
+      result.innerHTML =
+        "Hệ thống đang nâng cấp, bạn vui lòng thử lại sau nhé!<br>GK88 đang cố gắng quay lại sớm thôi.";
+      result.className = "modal-result err";
+      return;
+    }
     result.textContent = "Đang tra cứu...";
     result.className = "modal-result loading";
     try {
@@ -386,10 +437,13 @@ function initModal() {
   });
 }
 
+initMaintenanceModal();
 initModal();
 loadBoard();
 scheduleLeaderboardOpen();
-setInterval(loadBoard, REFRESH);
+if (!isMaintenanceMode()) {
+  setInterval(loadBoard, REFRESH);
+}
 
 let resizeScrollTimer;
 window.addEventListener("resize", () => {
