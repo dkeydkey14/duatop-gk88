@@ -412,28 +412,28 @@ body {
 }
 
 .canvas-pc .panel-lb .phase-row {
-  padding: 7px 9px;
-  margin-bottom: 6px;
-  font-size: 11px;
+  padding: 6px 8px;
+  margin-bottom: 5px;
+  font-size: 10px;
 }
 
 .canvas-pc .panel-lb .badge-live,
 .canvas-pc .panel-lb .badge-pending {
-  padding: 4px 9px;
-  font-size: 10px;
+  padding: 3px 8px;
+  font-size: 9px;
 }
 
 .canvas-pc .panel-lb .lb-table {
   position: absolute;
-  top: 268px;
+  top: 308px;
   left: 25px;
   width: 519px;
   margin: 0;
 }
 
 .canvas-pc .panel-lb .lb-tbody {
-  height: 330px;
-  max-height: 330px;
+  height: 292px;
+  max-height: 292px;
 }
 
 .canvas-pc .panel-lb .btn-rank {

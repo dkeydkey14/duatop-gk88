@@ -6,6 +6,7 @@ const MAINTENANCE_MODE = config.maintenanceMode === true;
 const LEADERBOARD_OPENS_AT = config.leaderboardOpensAt || "2026-07-01T11:00:00+07:00";
 const PHASE2_STARTS_AT = config.phase2StartsAt || "2026-07-16T11:00:00+07:00";
 const PHASE3_STARTS_AT = config.phase3StartsAt || "2026-08-01T11:00:00+07:00";
+const PHASE4_STARTS_AT = config.phase4StartsAt || "2026-08-16T11:00:00+07:00";
 const MEDALS = ["img/medal-1.png", "img/medal-2.png", "img/medal-3.png"];
 
 function getLeaderboardOpenTime() {
@@ -20,6 +21,10 @@ function getPhase3StartTime() {
   return new Date(PHASE3_STARTS_AT);
 }
 
+function getPhase4StartTime() {
+  return new Date(PHASE4_STARTS_AT);
+}
+
 function isLeaderboardOpen() {
   return Date.now() >= getLeaderboardOpenTime().getTime();
 }
@@ -30,6 +35,10 @@ function isPhase2Started() {
 
 function isPhase3Started() {
   return Date.now() >= getPhase3StartTime().getTime();
+}
+
+function isPhase4Started() {
+  return Date.now() >= getPhase4StartTime().getTime();
 }
 
 function maintenanceNoticeHtml() {
@@ -94,8 +103,10 @@ function setBadge(el, text, className) {
 function updatePhaseBadges() {
   const phase2 = isPhase2Started();
   const phase3 = isPhase3Started();
+  const phase4 = isPhase4Started();
   const phase1Live = isLeaderboardOpen() && !phase2;
   const phase2Live = phase2 && !phase3;
+  const phase3Live = phase3 && !phase4;
 
   document.querySelectorAll("[data-phase-badge='1']").forEach((el) => {
     if (phase2) setBadge(el, "ĐÃ KẾT THÚC", "badge-pending");
@@ -110,7 +121,13 @@ function updatePhaseBadges() {
   });
 
   document.querySelectorAll("[data-phase-badge='3']").forEach((el) => {
-    if (phase3) setBadge(el, "ĐANG DIỄN RA", "badge-live");
+    if (phase4) setBadge(el, "ĐÃ KẾT THÚC", "badge-pending");
+    else if (phase3Live) setBadge(el, "ĐANG DIỄN RA", "badge-live");
+    else setBadge(el, "CHƯA BẮT ĐẦU", "badge-pending");
+  });
+
+  document.querySelectorAll("[data-phase-badge='4']").forEach((el) => {
+    if (phase4) setBadge(el, "ĐANG DIỄN RA", "badge-live");
     else setBadge(el, "CHƯA BẮT ĐẦU", "badge-pending");
   });
 }
@@ -139,6 +156,12 @@ function scheduleLeaderboardOpen() {
 
   if (!isPhase3Started()) {
     scheduleAt(getPhase3StartTime().getTime(), () => {
+      updatePhaseBadges();
+    });
+  }
+
+  if (!isPhase4Started()) {
+    scheduleAt(getPhase4StartTime().getTime(), () => {
       updatePhaseBadges();
     });
   }
