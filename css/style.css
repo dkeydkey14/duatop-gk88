@@ -409,6 +409,9 @@ body {
   left: 16px;
   right: 16px;
   margin: 0;
+  max-height: 168px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .canvas-pc .panel-lb .phase-row {
@@ -425,15 +428,16 @@ body {
 
 .canvas-pc .panel-lb .lb-table {
   position: absolute;
-  top: 328px;
+  top: 252px;
   left: 25px;
   width: 519px;
   margin: 0;
 }
 
 .canvas-pc .panel-lb .lb-tbody {
-  height: 272px;
-  max-height: 272px;
+  height: 298px;
+  max-height: 298px;
+}
 }
 
 .canvas-pc .panel-lb .btn-rank {

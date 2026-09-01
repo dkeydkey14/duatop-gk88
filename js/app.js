@@ -3,51 +3,40 @@ const API_BASE = config.apiBase || "";
 const LIMIT = config.leaderboardLimit || 100;
 const REFRESH = config.refreshIntervalMs || 60_000;
 const MAINTENANCE_MODE = config.maintenanceMode === true;
-const LEADERBOARD_OPENS_AT = config.leaderboardOpensAt || "2026-07-01T11:00:00+07:00";
-const PHASE2_STARTS_AT = config.phase2StartsAt || "2026-07-16T11:00:00+07:00";
-const PHASE3_STARTS_AT = config.phase3StartsAt || "2026-08-01T11:00:00+07:00";
-const PHASE4_STARTS_AT = config.phase4StartsAt || "2026-08-16T11:00:00+07:00";
-const PHASE5_STARTS_AT = config.phase5StartsAt || "2026-09-01T11:00:00+07:00";
+const PHASE_START_AT = [
+  config.leaderboardOpensAt || "2026-07-01T11:00:00+07:00",
+  config.phase2StartsAt || "2026-07-16T11:00:00+07:00",
+  config.phase3StartsAt || "2026-08-01T11:00:00+07:00",
+  config.phase4StartsAt || "2026-08-16T11:00:00+07:00",
+  config.phase5StartsAt || "2026-09-01T11:00:00+07:00",
+  config.phase6StartsAt || "2026-09-16T11:00:00+07:00",
+  config.phase7StartsAt || "2026-10-01T11:00:00+07:00",
+  config.phase8StartsAt || "2026-10-16T11:00:00+07:00",
+];
+const PHASE_COUNT = PHASE_START_AT.length;
 const MEDALS = ["img/medal-1.png", "img/medal-2.png", "img/medal-3.png"];
 
+function getPhaseStartTime(phaseIndex) {
+  return new Date(PHASE_START_AT[phaseIndex]);
+}
+
 function getLeaderboardOpenTime() {
-  return new Date(LEADERBOARD_OPENS_AT);
-}
-
-function getPhase2StartTime() {
-  return new Date(PHASE2_STARTS_AT);
-}
-
-function getPhase3StartTime() {
-  return new Date(PHASE3_STARTS_AT);
-}
-
-function getPhase4StartTime() {
-  return new Date(PHASE4_STARTS_AT);
-}
-
-function getPhase5StartTime() {
-  return new Date(PHASE5_STARTS_AT);
+  return getPhaseStartTime(0);
 }
 
 function isLeaderboardOpen() {
-  return Date.now() >= getLeaderboardOpenTime().getTime();
+  return Date.now() >= getPhaseStartTime(0).getTime();
 }
 
-function isPhase2Started() {
-  return Date.now() >= getPhase2StartTime().getTime();
-}
-
-function isPhase3Started() {
-  return Date.now() >= getPhase3StartTime().getTime();
-}
-
-function isPhase4Started() {
-  return Date.now() >= getPhase4StartTime().getTime();
-}
-
-function isPhase5Started() {
-  return Date.now() >= getPhase5StartTime().getTime();
+/** Số giai đoạn đang diễn ra (1–8), hoặc 0 nếu BXH chưa mở */
+function getActivePhaseNumber() {
+  if (!isLeaderboardOpen()) return 0;
+  let active = 1;
+  for (let i = 1; i < PHASE_COUNT; i++) {
+    if (Date.now() >= getPhaseStartTime(i).getTime()) active = i + 1;
+    else break;
+  }
+  return active;
 }
 
 function maintenanceNoticeHtml() {
@@ -110,43 +99,22 @@ function setBadge(el, text, className) {
 }
 
 function updatePhaseBadges() {
-  const phase2 = isPhase2Started();
-  const phase3 = isPhase3Started();
-  const phase4 = isPhase4Started();
-  const phase5 = isPhase5Started();
-  const phase1Live = isLeaderboardOpen() && !phase2;
-  const phase2Live = phase2 && !phase3;
-  const phase3Live = phase3 && !phase4;
-  const phase4Live = phase4 && !phase5;
+  const active = getActivePhaseNumber();
 
-  document.querySelectorAll("[data-phase-badge='1']").forEach((el) => {
-    if (phase2) setBadge(el, "ĐÃ KẾT THÚC", "badge-pending");
-    else if (phase1Live) setBadge(el, "ĐANG DIỄN RA", "badge-live");
-    else setBadge(el, "CHUẨN BỊ DIỄN RA", "badge-pending");
-  });
-
-  document.querySelectorAll("[data-phase-badge='2']").forEach((el) => {
-    if (phase3) setBadge(el, "ĐÃ KẾT THÚC", "badge-pending");
-    else if (phase2Live) setBadge(el, "ĐANG DIỄN RA", "badge-live");
-    else setBadge(el, "CHƯA BẮT ĐẦU", "badge-pending");
-  });
-
-  document.querySelectorAll("[data-phase-badge='3']").forEach((el) => {
-    if (phase4) setBadge(el, "ĐÃ KẾT THÚC", "badge-pending");
-    else if (phase3Live) setBadge(el, "ĐANG DIỄN RA", "badge-live");
-    else setBadge(el, "CHƯA BẮT ĐẦU", "badge-pending");
-  });
-
-  document.querySelectorAll("[data-phase-badge='4']").forEach((el) => {
-    if (phase5) setBadge(el, "ĐÃ KẾT THÚC", "badge-pending");
-    else if (phase4Live) setBadge(el, "ĐANG DIỄN RA", "badge-live");
-    else setBadge(el, "CHƯA BẮT ĐẦU", "badge-pending");
-  });
-
-  document.querySelectorAll("[data-phase-badge='5']").forEach((el) => {
-    if (phase5) setBadge(el, "ĐANG DIỄN RA", "badge-live");
-    else setBadge(el, "CHƯA BẮT ĐẦU", "badge-pending");
-  });
+  for (let n = 1; n <= PHASE_COUNT; n++) {
+    document.querySelectorAll(`[data-phase-badge='${n}']`).forEach((el) => {
+      if (active === 0) {
+        if (n === 1) setBadge(el, "CHUẨN BỊ DIỄN RA", "badge-pending");
+        else setBadge(el, "CHƯA BẮT ĐẦU", "badge-pending");
+      } else if (n < active) {
+        setBadge(el, "ĐÃ KẾT THÚC", "badge-pending");
+      } else if (n === active) {
+        setBadge(el, "ĐANG DIỄN RA", "badge-live");
+      } else {
+        setBadge(el, "CHƯA BẮT ĐẦU", "badge-pending");
+      }
+    });
+  }
 }
 
 function scheduleAt(targetMs, fn) {
@@ -165,28 +133,11 @@ function scheduleLeaderboardOpen() {
     });
   }
 
-  if (!isPhase2Started()) {
-    scheduleAt(getPhase2StartTime().getTime(), () => {
-      updatePhaseBadges();
-    });
-  }
-
-  if (!isPhase3Started()) {
-    scheduleAt(getPhase3StartTime().getTime(), () => {
-      updatePhaseBadges();
-    });
-  }
-
-  if (!isPhase4Started()) {
-    scheduleAt(getPhase4StartTime().getTime(), () => {
-      updatePhaseBadges();
-    });
-  }
-
-  if (!isPhase5Started()) {
-    scheduleAt(getPhase5StartTime().getTime(), () => {
-      updatePhaseBadges();
-    });
+  for (let i = 1; i < PHASE_COUNT; i++) {
+    const startMs = getPhaseStartTime(i).getTime();
+    if (Date.now() < startMs) {
+      scheduleAt(startMs, () => updatePhaseBadges());
+    }
   }
 }
 
