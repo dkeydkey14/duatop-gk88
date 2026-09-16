@@ -412,8 +412,8 @@ body {
 }
 
 .canvas-pc .panel-lb .phase-row {
-  padding: 5px 8px;
-  margin-bottom: 4px;
+  padding: 4px 8px;
+  margin-bottom: 3px;
   font-size: 10px;
 }
 
@@ -425,15 +425,15 @@ body {
 
 .canvas-pc .panel-lb .lb-table {
   position: absolute;
-  top: 328px;
+  top: 348px;
   left: 25px;
   width: 519px;
   margin: 0;
 }
 
 .canvas-pc .panel-lb .lb-tbody {
-  height: 272px;
-  max-height: 272px;
+  height: 252px;
+  max-height: 252px;
 }
 
 .canvas-pc .panel-lb .btn-rank {
@@ -1367,16 +1367,16 @@ body.maint-open {
 }
 
 .canvas-mb .phase-box {
-  padding: 6px;
-  margin-bottom: 8px;
+  padding: 5px;
+  margin-bottom: 6px;
   border-radius: 24px;
 }
 
 .canvas-mb .phase-row {
-  padding: 5px 8px;
-  font-size: 6.5px;
-  border-radius: 12px;
-  margin-bottom: 4px;
+  padding: 4px 7px;
+  font-size: 6px;
+  border-radius: 10px;
+  margin-bottom: 3px;
 }
 
 .canvas-mb .btn-detail {
@@ -1408,8 +1408,8 @@ body.maint-open {
 }
 
 .canvas-mb .lb-tbody {
-  height: 268px;
-  max-height: 268px;
+  height: 248px;
+  max-height: 248px;
 }
 
 .canvas-mb .lb-row {
