@@ -16,4 +16,6 @@ window.APP_CONFIG = {
   phase5StartsAt: "2026-09-01T11:00:00+07:00",
   /** Giai đoạn 6 bắt đầu lúc 11:00 ngày 16/09/2026 — giờ Việt Nam (UTC+7) */
   phase6StartsAt: "2026-09-16T11:00:00+07:00",
+  /** Giai đoạn 7 bắt đầu lúc 11:00 ngày 01/10/2026 — giờ Việt Nam (UTC+7) */
+  phase7StartsAt: "2026-10-01T11:00:00+07:00",
 };
