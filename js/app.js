@@ -9,6 +9,7 @@ const PHASE3_STARTS_AT = config.phase3StartsAt || "2026-08-01T11:00:00+07:00";
 const PHASE4_STARTS_AT = config.phase4StartsAt || "2026-08-16T11:00:00+07:00";
 const PHASE5_STARTS_AT = config.phase5StartsAt || "2026-09-01T11:00:00+07:00";
 const PHASE6_STARTS_AT = config.phase6StartsAt || "2026-09-16T11:00:00+07:00";
+const PHASE7_STARTS_AT = config.phase7StartsAt || "2026-10-01T11:00:00+07:00";
 const MEDALS = ["img/medal-1.png", "img/medal-2.png", "img/medal-3.png"];
 
 function getLeaderboardOpenTime() {
@@ -35,6 +36,10 @@ function getPhase6StartTime() {
   return new Date(PHASE6_STARTS_AT);
 }
 
+function getPhase7StartTime() {
+  return new Date(PHASE7_STARTS_AT);
+}
+
 function isLeaderboardOpen() {
   return Date.now() >= getLeaderboardOpenTime().getTime();
 }
@@ -57,6 +62,10 @@ function isPhase5Started() {
 
 function isPhase6Started() {
   return Date.now() >= getPhase6StartTime().getTime();
+}
+
+function isPhase7Started() {
+  return Date.now() >= getPhase7StartTime().getTime();
 }
 
 function maintenanceNoticeHtml() {
@@ -124,11 +133,13 @@ function updatePhaseBadges() {
   const phase4 = isPhase4Started();
   const phase5 = isPhase5Started();
   const phase6 = isPhase6Started();
+  const phase7 = isPhase7Started();
   const phase1Live = isLeaderboardOpen() && !phase2;
   const phase2Live = phase2 && !phase3;
   const phase3Live = phase3 && !phase4;
   const phase4Live = phase4 && !phase5;
   const phase5Live = phase5 && !phase6;
+  const phase6Live = phase6 && !phase7;
 
   document.querySelectorAll("[data-phase-badge='1']").forEach((el) => {
     if (phase2) setBadge(el, "ĐÃ KẾT THÚC", "badge-pending");
@@ -161,7 +172,13 @@ function updatePhaseBadges() {
   });
 
   document.querySelectorAll("[data-phase-badge='6']").forEach((el) => {
-    if (phase6) setBadge(el, "ĐANG DIỄN RA", "badge-live");
+    if (phase7) setBadge(el, "ĐÃ KẾT THÚC", "badge-pending");
+    else if (phase6Live) setBadge(el, "ĐANG DIỄN RA", "badge-live");
+    else setBadge(el, "CHƯA BẮT ĐẦU", "badge-pending");
+  });
+
+  document.querySelectorAll("[data-phase-badge='7']").forEach((el) => {
+    if (phase7) setBadge(el, "ĐANG DIỄN RA", "badge-live");
     else setBadge(el, "CHƯA BẮT ĐẦU", "badge-pending");
   });
 }
@@ -208,6 +225,12 @@ function scheduleLeaderboardOpen() {
 
   if (!isPhase6Started()) {
     scheduleAt(getPhase6StartTime().getTime(), () => {
+      updatePhaseBadges();
+    });
+  }
+
+  if (!isPhase7Started()) {
+    scheduleAt(getPhase7StartTime().getTime(), () => {
       updatePhaseBadges();
     });
   }
