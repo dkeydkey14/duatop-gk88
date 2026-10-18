@@ -1180,6 +1180,103 @@ body {
   box-shadow: 0 6px 16px rgba(250, 153, 38, 0.55);
 }
 
+/* Banner thông báo bảo trì */
+.maint-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  display: flex;
+  justify-content: center;
+  padding: 10px 16px;
+  background: linear-gradient(90deg, #7a2400 0%, #c45100 42%, #fa9926 100%);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(80, 20, 0, 0.35);
+}
+
+.maint-banner.hidden {
+  display: none;
+}
+
+.maint-banner-inner {
+  width: min(960px, 100%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.maint-banner-badge {
+  flex-shrink: 0;
+  background: #fff;
+  color: #c2410c;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.maint-banner-text {
+  margin: 0;
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.maint-banner-text strong {
+  font-weight: 800;
+}
+
+.maint-banner-close {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.maint-banner-close:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+body.has-maint-banner {
+  padding-top: 56px;
+}
+
+@media (max-width: 768px) {
+  .maint-banner {
+    padding: 8px 10px;
+  }
+
+  .maint-banner-inner {
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .maint-banner-badge {
+    margin-top: 2px;
+    font-size: 10px;
+    padding: 5px 8px;
+  }
+
+  .maint-banner-text {
+    font-size: 12px;
+  }
+
+  body.has-maint-banner {
+    padding-top: 64px;
+  }
+}
+
 /* Popup bảo trì / nâng cấp hệ thống */
 .maint-modal {
   z-index: 1000;
