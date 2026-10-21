@@ -438,7 +438,6 @@ body {
   height: 298px;
   max-height: 298px;
 }
-}
 
 .canvas-pc .panel-lb .btn-rank {
   position: absolute;
@@ -446,6 +445,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   margin: 0;
+  z-index: 2;
 }
 
 /* Panel phải — padding theo Figma */

@@ -368,6 +368,15 @@ function initModal() {
   const modal = $("rank-modal");
   const input = $("rank-input");
   const result = $("rank-result");
+  const closeBtn = $("modal-close");
+  const cancelBtn = $("modal-cancel");
+  const backdrop = $("modal-backdrop");
+  const submitBtn = $("modal-submit");
+
+  if (!modal || !input || !result || !closeBtn || !cancelBtn || !backdrop || !submitBtn) {
+    console.warn("Rank modal: thiếu phần tử DOM, bỏ qua khởi tạo.");
+    return;
+  }
 
   const clearResult = () => {
     result.textContent = "";
@@ -387,11 +396,11 @@ function initModal() {
   document.querySelectorAll(".btn-check-rank").forEach((btn) => {
     btn.addEventListener("click", open);
   });
-  $("modal-close").addEventListener("click", close);
-  $("modal-cancel").addEventListener("click", close);
-  $("modal-backdrop").addEventListener("click", close);
+  closeBtn.addEventListener("click", close);
+  cancelBtn.addEventListener("click", close);
+  backdrop.addEventListener("click", close);
 
-  $("modal-submit").addEventListener("click", async () => {
+  submitBtn.addEventListener("click", async () => {
     const account = input.value.trim();
     if (!account) {
       result.textContent = "Vui lòng nhập tài khoản.";
@@ -416,6 +425,7 @@ function initModal() {
       const res = await fetch(
         `${API_BASE}/api/leaderboard/rank/${encodeURIComponent(account)}`
       );
+      if (!res.ok) throw new Error("fail");
       const data = await res.json();
       if (!data.found) {
         result.textContent = `Không tìm thấy tài khoản "${account}".`;
@@ -431,7 +441,7 @@ function initModal() {
   });
 
   input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") $("modal-submit").click();
+    if (e.key === "Enter") submitBtn.click();
     if (e.key === "Escape") close();
   });
 }
