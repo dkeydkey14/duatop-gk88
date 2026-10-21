@@ -99,7 +99,9 @@ function setBadge(el, text, className) {
 }
 
 function updatePhaseBadges() {
-  const active = getActivePhaseNumber();
+  const active = config.allPhasesEnded === true
+    ? PHASE_COUNT + 1
+    : getActivePhaseNumber();
 
   for (let n = 1; n <= PHASE_COUNT; n++) {
     document.querySelectorAll(`[data-phase-badge='${n}']`).forEach((el) => {
