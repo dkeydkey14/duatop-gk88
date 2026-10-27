@@ -12,9 +12,10 @@ const PHASE_START_AT = [
   config.phase6StartsAt || "2026-09-16T11:00:00+07:00",
   config.phase7StartsAt || "2026-10-01T11:00:00+07:00",
   config.phase8StartsAt || "2026-10-16T11:00:00+07:00",
+  config.phase9StartsAt || "2026-11-01T11:00:00+07:00",
 ];
 const PHASE_COUNT = PHASE_START_AT.length;
-const MEDALS = ["img/medal-1.png", "img/medal-2.png", "img/medal-3.png"];
+const MEDALS = ["img/medal-rank-1.png", "img/medal-rank-2.png", "img/medal-rank-3.png"];
 
 function getPhaseStartTime(phaseIndex) {
   return new Date(PHASE_START_AT[phaseIndex]);
@@ -109,11 +110,13 @@ function updatePhaseBadges() {
         if (n === 1) setBadge(el, "CHUẨN BỊ DIỄN RA", "badge-pending");
         else setBadge(el, "CHƯA BẮT ĐẦU", "badge-pending");
       } else if (n < active) {
-        setBadge(el, "ĐÃ KẾT THÚC", "badge-pending");
+        setBadge(el, "Đã kết thúc", "badge-pending");
       } else if (n === active) {
-        setBadge(el, "ĐANG DIỄN RA", "badge-live");
+        setBadge(el, "Đang diễn ra", "badge-live");
+      } else if (n === active + 1) {
+        setBadge(el, "Sắp bắt đầu", "badge-soon");
       } else {
-        setBadge(el, "CHƯA BẮT ĐẦU", "badge-pending");
+        setBadge(el, "Chưa bắt đầu", "badge-pending");
       }
     });
   }
@@ -195,7 +198,7 @@ function buildRowsHtml(rows) {
     .map((r) => {
       const top3 = r.rank <= 3;
       const rank = top3
-        ? `<img src="${MEDALS[r.rank - 1]}" alt="${r.rank}" width="40" height="40" />`
+        ? `<img src="${MEDALS[r.rank - 1]}" alt="${r.rank}" width="72" height="96" />`
         : `<span>${r.rank}</span>`;
       return `
         <div class="lb-row${top3 ? " top3" : ""}">
@@ -445,6 +448,12 @@ function initModal() {
     if (e.key === "Escape") close();
   });
 }
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-phase-badge].btn-detail");
+  if (!btn) return;
+  btn.closest(".canvas")?.querySelector(".tab[data-tab='content']")?.click();
+});
 
 initMaintenanceModal();
 initModal();

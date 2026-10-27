@@ -1,7 +1,7 @@
 const PC_W = 1920;
 const PC_H = 1200;
 const MB_W = 360;
-const MB_H = 1384;
+const MB_H = 1307;
 const BREAKPOINT = 768;
 
 function fitOne(scalerId, canvasId, designW, designH, { capAtOne = false } = {}) {
