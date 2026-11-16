@@ -13,7 +13,7 @@ const PHASE_START_AT = [
   config.phase7StartsAt || "2026-10-01T11:00:00+07:00",
   config.phase8StartsAt || "2026-10-16T11:00:00+07:00",
   config.phase9StartsAt || "2026-11-01T11:00:00+07:00",
-  config.phase10StartsAt || "2026-16-01T11:00:00+07:00",
+  config.phase10StartsAt || "2026-11-16T11:00:00+07:00",
 ];
 const PHASE_COUNT = PHASE_START_AT.length;
 const MEDALS = ["img/medal-rank-1.png", "img/medal-rank-2.png", "img/medal-rank-3.png"];
