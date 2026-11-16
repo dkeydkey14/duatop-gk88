@@ -22,7 +22,7 @@ window.APP_CONFIG = {
   phase8StartsAt: "2026-10-16T11:00:00+07:00",
   /** Giai đoạn 9 bắt đầu lúc 11:00 ngày 01/11/2026 — giờ Việt Nam (UTC+7) */
   phase9StartsAt: "2026-11-01T11:00:00+07:00",
-  phase10StartsAt: "2026-11-06T11:00:00+07:00",
+  phase10StartsAt: "2026-11-16T11:00:00+07:00",
   /** true = toàn bộ giai đoạn 1–8 hiển thị ĐÃ KẾT THÚC (sự kiện đã kết thúc) */
   allPhasesEnded: false,
 };
